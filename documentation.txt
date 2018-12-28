@@ -1,0 +1,26 @@
+Documentation for PHP Admin Panel
+------------------------------------
+1. How to upload Admin Panel / Back-end on Server?
+	- Login to the Server of your www.example.com domain via cPanel / FTP.
+	- Upload the PHP code directly to the desired path.
+	- Extract / Unzip the Folder
+	
+2. How to Upload Database?
+	- Create a new database from cPanel 
+	- Create new user for the database & give all the privileges to the user
+	- Now move to phpmyadmin & import the given database into newly created database
+	
+3. How to configure database credentials in PHP Code?
+	- Login to cPanel or FTP to your Quiz Domain
+	- Open File Manager or FTP
+	- Go To 'library/' directory and Open 'crud.php' file
+	- set 'DOMAIN_URL' to your www.myquiz.com domain on line number - 8
+		define('DOMAIN_URL','localhost/quiz/');
+	- Set database credentials with your credentials on line number - 17,18,19,20
+		
+		private $db_host = "localhost";  // Change as required
+		private $db_user = "mydb_user";  // Change as required
+		private $db_pass = "mydb_user_password";  // Change as required
+		private $db_name = "myquiz_db";	// Change as required
+
+Thats it! Now you are ready to run your first Quiz App
