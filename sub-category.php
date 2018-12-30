@@ -35,7 +35,8 @@
 											<form id="category_form" method="POST" action="db_operations.php" class="form-horizontal form-label-left" enctype="multipart/form-data">
 												<input type="hidden" id="add_subcategory" name="add_subcategory" required="" value="1" aria-required="true">
 												<div class="form-group">
-													<?php $sql = "select * from category order by id DESC";
+													<?php $db->sql("SET NAMES 'utf8'");
+													$sql = "select * from category order by id DESC";
 													$db->sql($sql);
 													$categories = $db->getResult();
 													?>
@@ -65,46 +66,41 @@
 											</form>
 										</div>
 										<div class='col-md-6 col-sm-12'>
-											<div class="row" id="toolbar">
-												<form id="report_form" method="post">
-												<div class="col-md-12">
-													<div class="form-group">
-														<select name="filter_status" id="filter_status" class="form-control">
-															<option value="">All</option>
-															<option value="0">Active</option>
-															<option value="1">De-active</option>
-														</select>
-													</div>
-												</div>
-												</form>
+											<div id="toolbar">
+												<select id='export_select' class="form-control" >
+													<option value="basic">Export This Page</option>
+													<option value="all">Export All</option>
+													<option value="selected">Export Selected</option>
+												</select>
 											</div>
 											<table class='table-striped' id='category_list'
 												data-toggle="table"
-												data-url="get-list.php?table=subcategory"
-												data-click-to-select="true"
-												data-side-pagination="server"
-												data-pagination="true"
-												data-page-list="[5, 10, 20, 50, 100, 200]"
-												data-search="true" data-show-columns="true"
-												data-show-refresh="true" data-trim-on-search="false"
-												data-sort-name="id" data-sort-order="desc"
+		                                        data-url="get-list.php?table=subcategory"
+		                                        data-click-to-select="true"
+		                                        data-side-pagination="server"
+		                                        data-pagination="true"
+		                                        data-page-list="[5, 10, 20, 50, 100, 200]"
+		                                        data-search="true" data-show-columns="true"
+		                                        data-show-refresh="true" data-trim-on-search="false"
+												data-sort-name="row_order" data-sort-order="asc"
 												data-mobile-responsive="true"
-												data-toolbar="#toolbar" 
+												data-toolbar="#toolbar" data-show-export="true"
 												data-maintain-selected="true"
-												data-show-export="false" data-export-types='["txt","excel"]'
+												data-export-types='["txt","excel"]'
 												data-export-options='{
-													"fileName": "category-list-<?=date('d-m-y')?>",
+													"fileName": "subcategory-list-<?=date('d-m-y')?>",
 													"ignoreColumn": ["state"]	
 												}'
-												data-query-params="queryParams_1"
-												>
+												data-query-params="queryParams">
 												<thead>
 													<tr>
 														<th data-field="state" data-checkbox="true"></th>
 														<th data-field="id" data-sortable="true">ID</th>
+														<th data-field="row_order" data-visible='false' data-sortable="true">Order</th>
 														<th data-field="maincat_id" data-sortable="true">Main Category</th>
 														<th data-field="subcategory_name" data-sortable="true">Category Name</th>
 														<th data-field="image" data-sortable="true">Image</th>
+														<th data-field="status" data-sortable="true">Status</th>
 														<th data-field="operate" data-sortable="true" data-events="actionEvents">Operate</th>
 													</tr>
 												</thead>
@@ -145,6 +141,19 @@
 									<label class="" for="image">Image <small>( Leave it blank for no change )</small></label>
 									<input type="file" name="image" id="update_image" aria-required="true">
 								</div>
+								<div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Status</label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <div id="status" class="btn-group" >
+                                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="status" value="0">  Deactive 
+                                            </label>
+                                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="status" value="1"> Active
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 								<input type="hidden" id="id" name="id">
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
@@ -171,6 +180,10 @@
             		// alert('You click remove icon, row: ' + JSON.stringify(row));
 					var regex = /<img.*?src="(.*?)"/;
 					var src = regex.exec(row.image)[1];
+					
+					$("input[name=status][value=1]").prop('checked', true);
+            		if($(row.status).text() == 'Deactive')
+						$("input[name=status][value=0]").prop('checked', true);
 					
 					$('#subcategory_id').val(row.id);
 					$('#update_maincat_id').val(row.maincat_id);
@@ -206,9 +219,8 @@
             }); 
         </script>
 		<script>
-		function queryParams_1(p){
+		function queryParams(p){
 			return {
-				"status": $('#filter_status').val(),
 				limit:p.limit,
 				sort:p.sort,
 				order:p.order,

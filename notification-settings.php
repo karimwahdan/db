@@ -35,15 +35,16 @@
 									$sql = "select * from `tbl_fcm_key` where id=1";
 									$db->sql($sql);
 									$res = $db->getResult();
-									// print_r($res[0]);
-									$data = $res[0];
+                                    if(!empty($res)){
+									$data = $res[0];}
 									?>
 									<form id="register_form"  method="POST" action ="db_operations.php"data-parsley-validate class="form-horizontal form-label-left">
 										<input type="hidden" id="update_fcm_server_key" name="update_fcm_server_key" required value='1'/>
+                                        <input type="hidden" id="update_fcm_server_key_id" name="update_fcm_server_key_id" value='<?php if(!empty($data['id'])){ echo $data['id']; } ?>'/>
 										<div class="form-group">
                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fcm_key">FCM Server Key</label>
                                             <div class="col-md-6 col-sm-6 col-xs-12">
-												<textarea id="fcm_key"  name="fcm_key" required class="form-control col-md-7 col-xs-12" rows=5><?=$data['fcm_key']?></textarea>
+												<textarea id="fcm_key"  name="fcm_key" required class="form-control col-md-7 col-xs-12" rows=5><?php if(!empty($data['fcm_key'])){ echo $data['fcm_key']; } ?></textarea>
                                             </div>
                                         </div>
 										<div class="ln_solid"></div>
@@ -94,7 +95,7 @@
 							$('#result').html(result);
 							$('#result').show();
 							$('#submit_btn').html('Submit');
-							// $('#register_form')[0].reset();
+							location.reload();
 						}
 					});
             	}

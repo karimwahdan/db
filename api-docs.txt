@@ -1,0 +1,47 @@
+API URL -->> 
+	http://quidemo.wrteam.in/api-v2.php  - (all APIs in one file only)
+
+API methods
+-------------------------
+1. get_categories()
+2. get_subcategory_by_maincategory()
+3. get_questions_by_subcategory()
+4. get_questions_by_category()
+5. report_question()
+6. get_privacy_policy_settings()
+
+------------------------------------------
+What parameters to be Passed?  See here >>
+------------------------------------------
+
+Use POST method to pass the parameters
+
+1. get_categories()
+	access_key:6808
+	get_categories:1
+	id:31 //{optional}
+
+2. get_subcategory_by_maincategory()
+	access_key:6808
+	get_subcategory_by_maincategory:1
+	main_id:31
+	
+3. get_questions_by_subcategory()
+	access_key:6808
+	get_questions_by_subcategory:1
+	subcategory:115
+
+4. get_questions_by_category()
+	access_key:6808
+	get_questions_by_category:1
+	category:15
+
+5. report_question()
+	access_key:6808
+	report_question:1
+	question_id:115
+	message: Any reporting message
+
+6. get_privacy_policy_settings()
+	access_key:6808
+	privacy_policy_settings:1

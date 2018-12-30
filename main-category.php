@@ -52,43 +52,37 @@
 											</form>
 										</div>
 										<div class='col-md-6 col-sm-12'>
-											<div class="row" id="toolbar">
-												<form id="report_form" method="post">
-												<div class="col-md-12">
-													<div class="form-group">
-														<select name="filter_status" id="filter_status" class="form-control">
-															<option value="">All</option>
-															<option value="0">Active</option>
-															<option value="1">De-active</option>
-														</select>
-													</div>
-												</div>
-												</form>
+											<div id="toolbar">
+												<select id='export_select' class="form-control" >
+													<option value="basic">Export This Page</option>
+													<option value="all">Export All</option>
+													<option value="selected">Export Selected</option>
+												</select>
 											</div>
 											<table class='table-striped' id='category_list'
 												data-toggle="table"
-												data-url="get-list.php?table=category"
-												data-click-to-select="true"
-												data-side-pagination="server"
-												data-pagination="true"
-												data-page-list="[5, 10, 20, 50, 100, 200]"
-												data-search="true" data-show-columns="true"
-												data-show-refresh="true" data-trim-on-search="false"
-												data-sort-name="id" data-sort-order="desc"
+		                                        data-url="get-list.php?table=category"
+		                                        data-click-to-select="true"
+		                                        data-side-pagination="server"
+		                                        data-pagination="true"
+		                                        data-page-list="[5, 10, 20, 50, 100, 200]"
+		                                        data-search="true" data-show-columns="true"
+		                                        data-show-refresh="true" data-trim-on-search="false"
+												data-sort-name="row_order" data-sort-order="asc"
 												data-mobile-responsive="true"
-												data-toolbar="#toolbar" 
+												data-toolbar="#toolbar" data-show-export="true"
 												data-maintain-selected="true"
-												data-show-export="false" data-export-types='["txt","excel"]'
+												data-export-types='["txt","excel"]'
 												data-export-options='{
 													"fileName": "category-list-<?=date('d-m-y')?>",
 													"ignoreColumn": ["state"]	
 												}'
-												data-query-params="queryParams_1"
-												>
+												data-query-params="queryParams">
 												<thead>
 													<tr>
 														<th data-field="state" data-checkbox="true"></th>
 														<th data-field="id" data-sortable="true">ID</th>
+														<th data-field="row_order" data-visible='false' data-sortable="true">Order</th>
 														<th data-field="category_name" data-sortable="true">Category Name</th>
 														<th data-field="image" data-sortable="true">Image</th>
 														<th data-field="operate" data-sortable="true" data-events="actionEvents">Operate</th>
@@ -184,9 +178,8 @@
             }); 
         </script>
 		<script>
-		function queryParams_1(p){
+		function queryParams(p){
 			return {
-				"status": $('#filter_status').val(),
 				limit:p.limit,
 				sort:p.sort,
 				order:p.order,

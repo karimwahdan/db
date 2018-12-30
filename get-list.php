@@ -10,6 +10,7 @@ include('library/crud.php');
 $db = new Database();
 $db->connect();
 date_default_timezone_set('Asia/Kolkata');
+$db->sql("SET NAMES 'utf8'");
 
 /*
 	1. category
@@ -24,7 +25,7 @@ date_default_timezone_set('Asia/Kolkata');
 
 if(isset($_GET['table']) && $_GET['table'] == 'category'){
 	$offset = 0;$limit = 10;
-	$sort = 'id'; $order = 'DESC';
+	$sort = 'row_order'; $order = 'ASC';
 	$where = '';
 	$table = $_GET['table'];
 	
@@ -34,13 +35,8 @@ if(isset($_GET['table']) && $_GET['table'] == 'category'){
 		$offset = $_GET['offset'];
 	if(isset($_GET['limit']))
 		$limit = $_GET['limit'];
-	
-	if(isset($_GET['sort']))
-		$sort = $_GET['sort'];
 	if(isset($_GET['order']))
 		$order = $_GET['order'];
-	
-	
 	if(isset($_GET['search'])){
 		$search = $_GET['search'];
 		$where = " where (`id` like '%".$search."%' OR `category_name` like '%".$search."%' )";
@@ -69,6 +65,7 @@ if(isset($_GET['table']) && $_GET['table'] == 'category'){
 		
 		$tempRow['id'] = $row['id'];
 		$tempRow['category_name'] = $row['category_name'];
+		$tempRow['row_order'] = $row['row_order'];
 		$tempRow['image'] = (!empty($row['image']))?'<img src="category/'.$row['image'].'" height=30 >':'<img src="images/logo.png" height=30>';
 		$tempRow['operate'] = $operate;
 		$rows[] = $tempRow;
@@ -80,7 +77,7 @@ if(isset($_GET['table']) && $_GET['table'] == 'category'){
 
 if(isset($_GET['table']) && $_GET['table'] == 'subcategory'){
 	$offset = 0;$limit = 10;
-	$sort = 'id'; $order = 'DESC';
+	$sort = 'row_order'; $order = 'ASC';
 	$where = '';
 	$table = $_GET['table'];
 	
@@ -90,13 +87,8 @@ if(isset($_GET['table']) && $_GET['table'] == 'subcategory'){
 		$offset = $_GET['offset'];
 	if(isset($_GET['limit']))
 		$limit = $_GET['limit'];
-	
-	if(isset($_GET['sort']))
-		$sort = $_GET['sort'];
 	if(isset($_GET['order']))
 		$order = $_GET['order'];
-	
-	
 	if(isset($_GET['search'])){
 		$search = $_GET['search'];
 		$where = " where (`id` like '%".$search."%' OR `maincat_id` like '%".$search."%' OR `subcategory_name` like '%".$search."%' )";
@@ -126,7 +118,9 @@ if(isset($_GET['table']) && $_GET['table'] == 'subcategory'){
 		$tempRow['id'] = $row['id'];
 		$tempRow['maincat_id'] = $row['maincat_id'];
 		$tempRow['subcategory_name'] = $row['subcategory_name'];
+		$tempRow['row_order'] = $row['row_order'];
 		$tempRow['image'] = (!empty($row['image']))?'<img src="subcategory/'.$row['image'].'" height=30 >':'<img src="images/logo.png" height=30>';
+		$tempRow['status'] = ($row['status'])?'<label class="label label-success">Active</label>':'<label class="label label-danger">Deactive</label>';
 		$tempRow['operate'] = $operate;
 		$rows[] = $tempRow;
 	}
@@ -392,12 +386,14 @@ if(isset($_GET['table']) && $_GET['table'] == 'question'){
 	$tempRow = array();
 	
 	foreach($res as $row){
+		$image = (!empty($row['image']))?'images/questions/'.$row['image']:'';
 		$operate = "<a class='btn btn-xs btn-primary edit-question' data-id='".$row['id']."' data-toggle='modal' data-target='#editQuestionModal' title='Edit'><i class='fas fa-edit'></i></a>";
-		$operate .= "<a class='btn btn-xs btn-danger delete-question' data-id='".$row['id']."' title='Delete'><i class='fas fa-trash'></i></a>";
+		$operate .= "<a class='btn btn-xs btn-danger delete-question' data-id='".$row['id']."' data-image='".$image."' title='Delete'><i class='fas fa-trash'></i></a>";
 		
 		$tempRow['id'] = $row['id'];
 		$tempRow['category'] = $row['category'];
 		$tempRow['subcategory'] = $row['subcategory'];
+		$tempRow['image'] = (!empty($row['image']))?'<a data-fancybox="Question-Image" href="images/questions/'.$row['image'].'" data-caption="'.$row['question'].'"><img src="images/questions/'.$row['image'].'" height=30 ></a>':'No image';
 		$tempRow['question'] = $row['question'];
 		$tempRow['optiona'] = $row['optiona'];
 		$tempRow['optionb'] = $row['optionb'];
@@ -414,4 +410,57 @@ if(isset($_GET['table']) && $_GET['table'] == 'question'){
 	print_r(json_encode($bulkData));
 }
 
+if(isset($_GET['table']) && $_GET['table'] == 'question_reports'){
+	$offset = 0;$limit = 10;
+	$sort = 'id'; $order = 'DESC';
+	$where = '';
+	$table = $_GET['table'];
+	
+	if(isset($_POST['id']))
+		$id = $_POST['id'];
+	if(isset($_GET['offset']))
+		$offset = $_GET['offset'];
+	if(isset($_GET['limit']))
+		$limit = $_GET['limit'];
+	
+	if(isset($_GET['sort']))
+		$sort = $_GET['sort'];
+	if(isset($_GET['order']))
+		$order = $_GET['order'];
+	
+	if(isset($_GET['search'])){
+		$search = $_GET['search'];
+		$where = " where (`id` like '%".$search."%' OR `username` like '%".$search."%' OR `payment_address` like '%".$search."%' OR `request_type` like '%".$search."%' OR `request_amount` like '%".$search."%' OR `points_used` like '%".$search."%' OR `date` like '%".$search."%' )";
+	}
+	
+	$sql = "SELECT COUNT(*) as total FROM `question_reports` ".$where;
+	$db->sql($sql);
+	$res = $db->getResult();
+	foreach($res as $row){
+		$total = $row['total'];
+	}
+	
+	$sql = "SELECT * FROM `question_reports` ".$where." ORDER BY ".$sort." ".$order." LIMIT ".$offset.", ".$limit;
+	$db->sql($sql);
+	$res = $db->getResult();
+	
+	$bulkData = array();
+	$bulkData['total'] = $total;
+	$rows = array();
+	$tempRow = array();
+	
+	foreach($res as $row){
+		$operate = "<a class='btn btn-xs btn-danger delete-report' data-id='".$row['id']."' title='Delete'><i class='fas fa-trash'></i></a>";
+		
+		$tempRow['id'] = $row['id'];
+		$tempRow['question_id'] = $row['question_id'];
+		$tempRow['message'] = $row['message'];
+		$tempRow['date'] = $row['date'];
+		$tempRow['operate'] = $operate;
+		$rows[] = $tempRow;
+	}
+	
+	$bulkData['rows'] = $rows;
+	print_r(json_encode($bulkData));
+}
 ?>

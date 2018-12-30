@@ -47,7 +47,7 @@ if(isset($_SESSION['id']) && isset($_SESSION['username']))
                               <div>
 									<img src="images/logo-460x114.png" alt="Spin for Cash" width='300'>
 									<!--<h4>Spin for Cash</h4>-->
-                                    <p>©<?=date('Y')?> All Rights Reserved. Quiz to Cash.</p>
+                                    <p><br>© <?=date('Y')?> All Rights Reserved. Quiz to Cash.</p>
                                 </div>
                             </div>
                         </form>

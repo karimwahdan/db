@@ -1,10 +1,11 @@
 <?php
 
 $file_path = 'http://' . $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']) . '/';
-if ($_GET) {
-    include('library/crud.php');
+include('library/crud.php');
 	$db = new Database();
 	$db->connect();
+	$db->sql("SET NAMES 'utf8'");
+if ($_GET) {
     
 	$response = array();
    if (isset($_GET['cate_list'])) {
@@ -116,10 +117,7 @@ if ($_GET) {
     } else {
 		echo json_encode($response);
     }
-} else {
-    echo json_encode(array("status" => FALSE, "data" => "", "msg" => "unauthorize"));
 }
-
 
 if (!function_exists("array_column")) {
 

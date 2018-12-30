@@ -43,11 +43,19 @@
                         <ul class="nav child_menu">
                             <li><a href="main-category.php">Main Category</a></li>
                             <li><a href="sub-category.php">Sub Category</a></li>
+                            <li><a href="category-order.php">Category Order</a></li>
                         </ul>
                     </li>
 					<li><a href="questions.php"><i class="fas fa-trophy"></i> Questions</a></li>
+					<li><a href="question-reports.php"><i class="far fa-question-circle"></i> Question Reports</a></li>
 					<li><a href="send-notifications.php"><i class="fas fa-bullhorn"></i> Send Notifications</a></li>
-					<li><a href="notification-settings.php"><i class="fas fa-cog"></i> Notification Settings</a></li>
+					<li><a href="import-questions.php"><i class="fas fa-upload"></i> Import Questions</a></li>
+                    <li>
+                        <a><i class="fas fa-cog"></i> Settings<span class="fas fa-caret-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="notification-settings.php">Notification Settings</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 		</div>

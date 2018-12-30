@@ -5,7 +5,7 @@
  * @Version 1.0
  * @Package Database
  */
-define('DOMAIN_URL','https://thanwyaquiz.com/');
+define('DOMAIN_URL','http://quiz.wrteam.in/');
 
 class Database{
 	/* 
@@ -14,10 +14,10 @@ class Database{
 	 * means that they will only be available with the 
 	 * Database class
 	 */
-	private $db_host = "den1.mysql4.gear.host";  // Change as required
-	private $db_user = "thanwyaquizdb";  // Change as required
-	private $db_pass = "123_123";  // Change as required
-	private $db_name = "thanwyaquizdb";	// Change as required
+	private $db_host = "localhost";  // Change as required
+	private $db_user = "";  // Change as required
+	private $db_pass = "";  // Change as required
+	private $db_name = "";	// Change as required
 	
 	/*
 	 * Extra variables that are required by other function such as boolean con variable

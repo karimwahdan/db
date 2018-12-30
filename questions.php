@@ -37,7 +37,9 @@
 											<div class="form-group">
 												<label class="control-label col-md-1 col-sm-3 col-xs-12" for="category">Category</label>
 												<div class="col-md-4 col-sm-6 col-xs-12">
-												<?php $sql = "select id,`category_name` from `category` order by id desc";
+												<?php 
+												$db->sql("SET NAMES 'utf8'");
+												$sql = "select id,`category_name` from `category` order by id desc";
 													$db->sql($sql);
 													$res = $db->getResult();
 												?>
@@ -50,7 +52,7 @@
 												</div>
 												<label class="control-label col-md-2 col-sm-3 col-xs-12" for="subcategory">Sub Category</label>
 												<div class="col-md-4 col-sm-6 col-xs-12">
-													<select name='subcategory' id='subcategory' class='form-control' required>
+													<select name='subcategory' id='subcategory' class='form-control' >
 														<option value=''>Select Sub Category</option>
 													</select>
 												</div>
@@ -58,7 +60,14 @@
 											<div class="form-group">
 												<label class="control-label col-md-1 col-sm-3 col-xs-12" for="question">Question</label>
 												<div class="col-md-10 col-sm-6 col-xs-12">
-													<input type="text" id="question" name="question" required="required" class="form-control col-md-7 col-xs-12" aria-required="true">
+													<!--<input type="text" id="question" name="question" required="required" class="form-control col-md-7 col-xs-12" aria-required="true">-->
+													<textarea id="question" name="question" class="form-control col-md-7 col-xs-12" required></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="control-label col-md-1 col-sm-3 col-xs-12" for="image">Image for Question <small>( if any )</small></label>
+												<div class="col-md-10 col-sm-6 col-xs-12">
+													<input type="file" id="image" name="image" class="form-control col-md-7 col-xs-12" aria-required="true">
 												</div>
 											</div>
 											<div class="form-group">
@@ -178,6 +187,7 @@
                                                 <th data-field="id" data-sortable="true">ID</th>
                                                 <th data-field="category" data-sortable="true" data-visible='false'>Category</th>
                                                 <th data-field="subcategory" data-sortable="true" data-visible='false'>Sub Category</th>
+                                                <th data-field="image" data-sortable="true">Image</th>
                                                 <th data-field="question" data-sortable="true">Question</th>
                                                 <th data-field="optiona" data-sortable="true">Option A</th>
                                                 <th data-field="optionb" data-sortable="true">Option B</th>
@@ -208,6 +218,7 @@
                             <form id="update_form"  method="POST" action ="db_operations.php" data-parsley-validate class="form-horizontal form-label-left">
                                 <input type='hidden' name="question_id" id="question_id" value=''/>
                                 <input type='hidden' name="update_question" id="update_question" value='1'/>
+								<input type='hidden' name="image_url" id="image_url" value=''/>
 								<div class="form-group">
 									<label class="control-label col-md-1 col-sm-3 col-xs-12" for="category">Category</label>
 									<div class="col-md-4 col-sm-6 col-xs-12">
@@ -220,9 +231,15 @@
 									</div>
 									<label class="control-label col-md-2 col-sm-3 col-xs-12" for="subcategory">Sub Category</label>
 									<div class="col-md-4 col-sm-6 col-xs-12">
-										<select name="subcategory" id="edit_subcategory" class="form-control" required>
+										<select name="subcategory" id="edit_subcategory" class="form-control" >
 											<option value="">Select Sub Category</option>
 										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-md-5 col-sm-3 col-xs-12" for="image">Image for Question <small>( Leave it blank for no change )</small></label>
+									<div class="col-md-10 col-md-offset-1 col-sm-6 col-xs-12">
+										<input type="file" id="edit_image" name="image" class="form-control col-md-7 col-xs-12" aria-required="true">
 									</div>
 								</div>
 								<div class="form-group">
@@ -356,8 +373,7 @@
             	rules:{
 				question:"required",
 				category:"required",
-				subcategory:"required",
-            	a:"required",
+				a:"required",
             	b:"required",
             	c:"required",
             	d:"required",
@@ -420,6 +436,13 @@
             window.actionEvents = {
             	'click .edit-question': function (e, value, row, index) {
             		// alert('You click remove icon, row: ' + JSON.stringify(row));
+					if(row.image != 'No image'){
+						var regex = /<img.*?src="(.*?)"/;
+						var src = regex.exec(row.image)[1];
+						$('#image_url').val(src);
+					}else{
+						$('#image_url').val('');
+					}
 					$('#question_id').val(row.id);
 					$('#edit_question').val(row.question);
 					$('#edit_category').val(row.category).trigger("change",[row.category,row.subcategory]);
@@ -464,6 +487,7 @@
 						$('#update_result').html(result);
 						$('#update_result').show().delay(8000).fadeOut();
 						$('#update_btn').html('Update Question');
+						$('#edit_image').val('');
 						$('#questions').bootstrapTable('refresh');
 						setTimeout(function() {$('#editQuestionModal').modal('hide');}, 3000);
 					}
@@ -475,10 +499,11 @@
 		$(document).on('click','.delete-question',function(){
 			if(confirm('Are you sure? Want to delete question')){
 				id = $(this).data("id");
+				image = $(this).data("image");
 				$.ajax({
 					url : 'db_operations.php',
 					type: "get",
-					data: 'id='+id+'&delete_question=1',
+					data: 'id='+id+'&image='+image+'&delete_question=1',
 					success: function(result){
 						if(result==1){
 							$('#questions').bootstrapTable('refresh');

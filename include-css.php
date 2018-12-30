@@ -1,5 +1,6 @@
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<!-- FavIcon -->
-		<link rel="icon"  type="image/png"  href="favicon/fav-icon.png" />
+		<link rel="icon"  type="image/png"  href="images/logo-half.png" />
 		<!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
         <!-- Font Awesome <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />-->
@@ -44,6 +45,10 @@
 		
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+		<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+		
 		<script>
 		function conf(msg){
 			if(typeof(msg)==='undefined') msg = 'proceed';
