@@ -172,7 +172,7 @@ if(isset($_POST['name']) and isset($_POST['add_subcategory'])){
 		}
 	}
 	
-	$sql = "INSERT INTO `subcategory` (`maincat_id`,`subcategory_name`, `image`,`row_order`) VALUES ('".$maincat_id."','".$name."','".$filename."','0')";
+	$sql = "INSERT INTO `subcategory` (`maincat_id`,`subcategory_name`, `image`,`status`,`row_order`) VALUES ('".$maincat_id."','".$name."','".$filename."','1','0')";
 	//echo $sql;
 	//return false;
 	$db->sql($sql);
