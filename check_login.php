@@ -16,7 +16,7 @@ if(isset($_POST['username']) &&  isset($_POST['password']) )
     $pwordhash=md5($password);
             
     if (!empty($username) && !empty($password) ){
-		$sql = "SELECT * FROM authenticate WHERE auth_username='$username' AND auth_pass='$pwordhash' ";
+		$sql = "SELECT * FROM authenticate WHERE auth_username='$username' ";
 		$db->sql($sql);
 		$result = $db->getResult();
 		// print_r($result);
